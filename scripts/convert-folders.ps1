@@ -1,7 +1,10 @@
 param(
-    [string]$SourceRoot = 'D:\Photos\Camera JPEG',
-    [string]$DestinationRoot = 'D:\Photos\DNG',
-    [string[]]$Days = @('2026-10-03', '2026-10-04'),
+    [Parameter(Mandatory)]
+    [string]$SourceRoot,
+    [Parameter(Mandatory)]
+    [string]$DestinationRoot,
+    [Parameter(Mandatory)]
+    [string[]]$Days,
     [string]$ExifTool = "$env:LOCALAPPDATA\Programs\ExifTool\ExifTool.exe",
     [switch]$Execute,
     [switch]$Display,

@@ -36,7 +36,7 @@ This conversion cannot recover sensor RAW data or make JPEG-derived DNGs suitabl
 For PureRAW, locate the original NEF instead of converting the JPEG. The helper below searches for a same-name NEF and compares its EXIF capture time with the JPEG, since names such as `DSC_0112` can repeat:
 
 ```powershell
-.\scripts\find-matching-nef.ps1 -JpegPath 'D:\Photos\Camera JPEG\2026-10-04\DSC_0112.JPG' -RawRoots 'E:\DCIM'
+.\scripts\find-matching-nef.ps1 -JpegPath '<photos>\Camera JPEG\<day>\DSC_0112.JPG' -RawRoots '<card>\DCIM'
 ```
 
 Use the actual mounted RAW folder in `-RawRoots` (the `E:` drive in this example may not be connected). A matching capture time is evidence that the NEF is the corresponding shot. Check the image itself before treating it as certain. If no NEF exists, a JPEG-derived DNG cannot provide the RAW data PureRAW needs.
@@ -45,12 +45,13 @@ The sample from Nikon Z 8 `DSC_0001.JPG` produced a DNG with LinearRaw photometr
 
 ## Two date folders
 
-`scripts/convert-folders.ps1` selects JPEGs in `D:\Photos\Camera JPEG\2026-10-03` and `2026-10-04` and writes matching filenames under `D:\Photos\DNG`. It runs in dry-run mode by default:
+`scripts/convert-folders.ps1` selects JPEGs in one or more `<SourceRoot>\<day>` folders and writes matching filenames under `<DestinationRoot>\<day>`. All three parameters are required. It runs in dry-run mode by default:
 
 ```powershell
-.\scripts\convert-folders.ps1
-.\scripts\convert-folders.ps1 -Execute
-.\scripts\convert-folders.ps1 -Execute -Display
+$opts = @{ SourceRoot = '<photos>\Camera JPEG'; DestinationRoot = '<photos>\DNG'; Days = '<day1>', '<day2>' }
+.\scripts\convert-folders.ps1 @opts
+.\scripts\convert-folders.ps1 @opts -Execute
+.\scripts\convert-folders.ps1 @opts -Execute -Display
 ```
 
 The script writes one DNG to a temporary path, copies `Make`, `Model`, and selected shooting EXIF with ExifTool, validates it with Adobe's tool, and then replaces the old DNG. It leaves a failed temporary file for inspection. It skips files already written in the same mode (linear vs `-Display`). To run a small batch first, pass `-Limit 2 -Execute`.
