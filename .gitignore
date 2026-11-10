@@ -8,3 +8,7 @@ preview-*.png
 /.cursor/mcp.json
 /.claude/settings.local.json
 /.agents/mcp_config.json
+
+# Python bytecode
+__pycache__/
+*.py[cod]
